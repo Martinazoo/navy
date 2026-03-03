@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "ReactAppStructure.app"
-               BlueprintName = "ReactAppStructure"
-               ReferencedContainer = "container:ReactAppStructure.xcodeproj">
+               BuildableName = "navy.app"
+               BlueprintName = "navy"
+               ReferencedContainer = "container:navy.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "ReactAppStructureTests.xctest"
-               BlueprintName = "ReactAppStructureTests"
-               ReferencedContainer = "container:ReactAppStructure.xcodeproj">
+               BuildableName = "navyTests.xctest"
+               BlueprintName = "navyTests"
+               ReferencedContainer = "container:navy.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "ReactAppStructure.app"
-            BlueprintName = "ReactAppStructure"
-            ReferencedContainer = "container:ReactAppStructure.xcodeproj">
+            BuildableName = "navy.app"
+            BlueprintName = "navy"
+            ReferencedContainer = "container:navy.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "ReactAppStructure.app"
-            BlueprintName = "ReactAppStructure"
-            ReferencedContainer = "container:ReactAppStructure.xcodeproj">
+            BuildableName = "navy.app"
+            BlueprintName = "navy"
+            ReferencedContainer = "container:navy.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
