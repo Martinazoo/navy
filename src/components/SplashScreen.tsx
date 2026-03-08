@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 export default function SplashScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>HevyClone</Text>
+      <Text style={styles.title}>Navy</Text>
       <ActivityIndicator size="large" color="#007AFF" />
     </View>
   );

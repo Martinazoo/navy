@@ -8,7 +8,7 @@ import { authStore } from '../auth/auth.store';
 export default observer(function HomeScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home Screen</Text>
+      <Text style={styles.text}>Home Screen</Text>
       <Button title="Go to Profile" onPress={() => {}} />
       <Button title="Logout" onPress={() => authStore.logout()} />
     </View>
@@ -17,5 +17,5 @@ export default observer(function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
-  title: { fontSize: 28, fontWeight: 'bold', marginBottom: 20 },
+  text: { fontSize: 22, marginBottom: 20 },
 });

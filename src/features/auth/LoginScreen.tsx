@@ -1,4 +1,3 @@
-// src/features/auth/LoginScreen.tsx
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import { observer } from 'mobx-react-lite';
