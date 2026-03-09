@@ -4,6 +4,7 @@ import { Ionicons } from '@react-native-vector-icons/ionicons';
 import HomeScreen from '../features/home/HomeScreen';
 import ProfileScreen from '../features/profile/ProfileScreen';
 import MapScreen from '../features/map/MapScreen';
+import MapScreen2 from '../features/map/MapScreenv2';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,6 +22,8 @@ export default function AppNavigator() {
             iconName = 'person-outline';
           } else if (route.name === 'Map') {
             iconName = 'map-outline';
+          } else if (route.name === 'Map2') {
+            iconName = 'map-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -31,6 +34,7 @@ export default function AppNavigator() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Map" component={MapScreen} />
+      <Tab.Screen name="Map2" component={MapScreen2} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
