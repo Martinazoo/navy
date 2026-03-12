@@ -18,15 +18,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.32696709"
-     inkscape:cx="391.47671"
-     inkscape:cy="966.45813"
+     inkscape:zoom="0.57793376"
+     inkscape:cx="769.11928"
+     inkscape:cy="486.21489"
      inkscape:window-width="1512"
      inkscape:window-height="831"
      inkscape:window-x="0"
      inkscape:window-y="33"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Laag_3" />
+     inkscape:current-layer="g8" />
   <defs
      id="defs1">
     <style
@@ -136,7 +136,7 @@
     <path
        class="cls-12"
        d="M1064.39,88.97l-460.4,606.79,53.19,47.49-51.66,82.72,10.72,816.51-352.34,1.53,18.38,257.36h629.62l7.66-989.62,454.98-623.49-310.16-199.3ZM1081.74,264.63c-1.29,0-1.29-2,0-2s1.29,2,0,2Z"
-       id="path1" />
+       id="hallway-path" />
     <g
        id="g5">
       <polygon
@@ -150,7 +150,7 @@
       <polygon
          class="cls-21"
          points="1139.1 266.55 1172.93 219.95 1076.42 149.48 1042.23 196.7 1139.1 266.55"
-         id="polygon3" />
+         id="M331-polygon" />
       <path
          class="cls-21"
          d="M715.24,752.85c1.96,1.34,4.38,3.04,6.67,4.67l10.73-13.62,24.84,17.69,16.17-21.1,14.14,9.97,84.66-116.61-101.5-73.19-108.65,151.04,53.36,40.6-.42.56Z"
@@ -162,11 +162,12 @@
       <polygon
          class="cls-21"
          points="977.49 273.53 910.7 366.39 1013.04 440.18 1080.24 347.62 977.49 273.53"
-         id="polygon4" />
+         id="M328-polygon"
+         inkscape:label="M328-polygon" />
       <path
          class="cls-21"
          d="M1038.21,197.5l-4.18-2.58-54.8,76.17,102.76,74.1,55.34-76.22-99.12-71.47ZM1081.74,263.63c-1.29,0-1.29-2,0-2s1.29,2,0,2Z"
-         id="path5" />
+         id="M330-path" />
     </g>
     <rect
        class="cls-21"
@@ -180,7 +181,7 @@
       <path
          class="cls-21"
          d="M1115.57,412.59l.79.61-3.4,12.56,73.96,53.64,82.79-114.14-103.15-73.53-75.23,102.55c2.8,1.91,10.91,8.03,24.24,18.31Z"
-         id="path6" />
+         id="M329-path" />
       <polygon
          class="cls-21"
          points="929.95 673.53 928.23 679.02 898.32 657.36 876.03 687.74 981.45 762.71 1007.36 727 929.95 673.53"
@@ -318,7 +319,7 @@
     <polygon
        class="cls-15"
        points="1172.93 287.25 1208.07 240.39 1298.46 306.14 1263.83 351.07 1172.93 287.25"
-       id="polygon26" />
+       id="M3S4-polygon" />
     <polygon
        class="cls-1"
        points="689.27 795.42 734.46 827.59 714.04 852.35 713.53 886.31 657.87 886.31 657.87 840.86 689.27 795.42"
@@ -1312,7 +1313,8 @@
        id="text161"
        x="815.91882"
        y="1379.3231"
-       style="fill:#264a45;fill-opacity:1"><tspan
+       style="fill:#264a45;fill-opacity:1"
+       inkscape:label="text161"><tspan
          class="cls-22"
          x="815.91882"
          y="1379.3231"
@@ -1338,7 +1340,8 @@
        id="text164"
        x="676.17529"
        y="1579.7393"
-       style="fill:#264a45;fill-opacity:1"><tspan
+       style="fill:#264a45;fill-opacity:1"
+       inkscape:label="text164"><tspan
          class="cls-22"
          x="676.17529"
          y="1579.7393"
