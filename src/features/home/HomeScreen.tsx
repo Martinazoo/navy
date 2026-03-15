@@ -1,20 +1,53 @@
-import { colors } from "../../constants/colours";
-import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { useTheme } from "../../constants/ThemeContext";
+import React, { useMemo, useState } from "react";
+import { View } from "react-native";
 
-import SearchPanel from "../../components/bottom/SearchPanel";
 import CategoriesPanel from "../../components/bottom/CategoriesPanel";
 import SchedulePanel from "../../components/bottom/SchedulePanel";
+import SearchPanel from "../../components/bottom/SearchPanel";
+import TopControls from "../../components/top/TopControls";
 
 import { scheduleDataTable } from "../../constants/scheduleData";
+import { createIndexStyles } from "../../constants/styles/indexStyles";
 
 const scheduleData = scheduleDataTable;
+const BUILDING_OPTIONS = ["Building A", "Building W", "Building M", "Building C"];
+const FLOOR_OPTIONS = ["Floor 0", "Floor 1", "Floor 2", "Floor 3"];
+
+type PanelMode = "search" | "categories" | "schedule";
+type CategoryField = "start" | "dest" | null;
 
 export default function Index() {
+  const { colors: themeColors, highContrast, fontScale } = useTheme();
+
   const [start, setStart] = useState("");
   const [dest, setDest] = useState("");
-  const [mode, setMode] = useState<"search" | "categories" | "schedule">("search");
-  const [categoryField, setCategoryField] = useState<"start" | "dest" | null>(null);
+  const [mode, setMode] = useState<PanelMode>("search");
+  const [categoryField, setCategoryField] = useState<CategoryField>(null);
+  const [selectedBuilding, setSelectedBuilding] = useState(BUILDING_OPTIONS[0]);
+  const [selectedFloor, setSelectedFloor] = useState(FLOOR_OPTIONS[0]);
+  const [showBuildingDropdown, setShowBuildingDropdown] = useState(false);
+  const [showFloorDropdown, setShowFloorDropdown] = useState(false);
+
+  const styles = useMemo(
+    () => createIndexStyles(themeColors, highContrast, fontScale),
+    [themeColors, highContrast, fontScale]
+  );
+
+  const toggleBuildingDropdown = () => {
+    setShowBuildingDropdown((prev) => !prev);
+    setShowFloorDropdown(false);
+  };
+
+  const toggleFloorDropdown = () => {
+    setShowFloorDropdown((prev) => !prev);
+    setShowBuildingDropdown(false);
+  };
+
+  const openCategoryPicker = (field: Exclude<CategoryField, null>) => {
+    setCategoryField(field);
+    setMode("categories");
+  };
 
   const handleCategorySelect = (label: string) => {
     if (label === "Your Timetable") {
@@ -43,6 +76,27 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
+      <TopControls
+        styles={styles}
+        themeColors={themeColors}
+        highContrast={highContrast}
+        selectedBuilding={selectedBuilding}
+        selectedFloor={selectedFloor}
+        showBuildingDropdown={showBuildingDropdown}
+        showFloorDropdown={showFloorDropdown}
+        buildingOptions={BUILDING_OPTIONS}
+        floorOptions={FLOOR_OPTIONS}
+        onToggleBuildingDropdown={toggleBuildingDropdown}
+        onToggleFloorDropdown={toggleFloorDropdown}
+        onSelectBuilding={(value) => {
+          setSelectedBuilding(value);
+          setShowBuildingDropdown(false);
+        }}
+        onSelectFloor={(value) => {
+          setSelectedFloor(value);
+          setShowFloorDropdown(false);
+        }}
+      />
       <View style={styles.mapArea} />
       <View style={styles.bottomPanel}>
         {mode === "search" && (
@@ -51,17 +105,17 @@ export default function Index() {
             dest={dest}
             onChangeStart={setStart}
             onChangeDest={setDest}
-            onPressFind={() => {}}
             onOpenCategoriesStart={() => {
-              setCategoryField("start");
-              setMode("categories");
+              openCategoryPicker("start");
             }}
             onLocateStart={() => {
               setStart("Current location");
             }}
             onOpenCategoriesDest={() => {
-              setCategoryField("dest");
-              setMode("categories");
+              openCategoryPicker("dest");
+            }}
+            onExitPress={() => {
+              setDest("Nearest Exit");
             }}
           />
         )}
@@ -82,23 +136,3 @@ export default function Index() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.primary[50],
-  },
-  mapArea: {
-    flex: 1,
-    backgroundColor: colors.primary[50],
-  },
-  bottomPanel: {
-    paddingHorizontal: 20,
-    paddingTop: 40,
-    paddingBottom: 30,
-    backgroundColor: colors.primary[800],
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    elevation: 5,
-  },
-});

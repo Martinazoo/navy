@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text, Pressable } from "react-native";
+import { createBottomStyles } from "../../constants/styles/bottomStyles";
+import { useTheme } from "../../constants/ThemeContext";
 import Ionicons from "@react-native-vector-icons/ionicons";
-import { bottomStyles } from "../../constants/bottomStyles";
-import { colors } from "../../constants/colours";
+import React, { useMemo } from "react";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import ScheduleItem, { ScheduleEntry } from "../ScheduleItem";
 
 export type { ScheduleEntry };
@@ -14,18 +14,31 @@ interface SchedulePanelProps {
 }
 
 export default function SchedulePanel({ items, onBack, onSelect }: SchedulePanelProps) {
+  const { colors: themeColors, fontScale, highContrast } = useTheme();
+  const styles = useMemo(
+    () => createBottomStyles(themeColors, { fontScale, highContrast }),
+    [themeColors, fontScale, highContrast]
+  );
+
   return (
     <>
-      <View style={bottomStyles.categoriesHeader}>
+      <View style={styles.categoriesHeader}>
         <Pressable onPress={onBack}>
-          <Ionicons name="chevron-back" size={32} color={colors.secondary[50]} />
+          <Ionicons
+            name="chevron-back"
+            size={32}
+            color={highContrast ? themeColors.primary[950] : themeColors.secondary[50]}
+          />
         </Pressable>
-        <Text style={bottomStyles.categoriesTitle}>Your Timetable</Text>
+        <Text style={styles.categoriesTitle}>Your Timetable</Text>
         <View style={{ width: 24 }} />
       </View>
-      {items.map(item => (
+      <ScrollView style={{height: 205}}>
+        {items.map(item => (
         <ScheduleItem key={item.id} item={item} onPress={onSelect} />
       ))}
+      </ScrollView>
+    
     </>
   );
 }

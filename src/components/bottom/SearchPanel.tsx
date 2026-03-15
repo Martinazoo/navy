@@ -1,20 +1,20 @@
-import React from "react";
-import { View, Text, TextInput, Pressable } from "react-native";
-import MaterialIcons from "@react-native-vector-icons/material-icons";
+import { createBottomStyles } from "../../constants/styles/bottomStyles";
+import { useTheme } from "../../constants/ThemeContext";
 import AntDesign from "@react-native-vector-icons/ant-design";
 import FontAwesome5 from "@react-native-vector-icons/fontawesome5";
-import { bottomStyles } from "../../constants/bottomStyles";
-import { colors } from "../../constants/colours";
+import MaterialIcons from "@react-native-vector-icons/material-icons";
+import React, { useMemo } from "react";
+import { Pressable, Text, TextInput, View } from "react-native";
 
 interface SearchPanelProps {
   start: string;
   dest: string;
   onChangeStart: (text: string) => void;
   onChangeDest: (text: string) => void;
-  onPressFind: () => void;
   onOpenCategoriesStart: () => void;
   onOpenCategoriesDest: () => void;
   onLocateStart?: () => void;
+  onExitPress?: () => void;
 }
 
 export default function SearchPanel({
@@ -22,71 +22,76 @@ export default function SearchPanel({
   dest,
   onChangeStart,
   onChangeDest,
-  onPressFind,
   onOpenCategoriesStart,
   onOpenCategoriesDest,
   onLocateStart = () => {},
+  onExitPress = () => {  },
 }: SearchPanelProps) {
+  const { colors: themeColors, fontScale, highContrast } = useTheme();
+  const styles = useMemo(
+    () => createBottomStyles(themeColors, { fontScale, highContrast }),
+    [themeColors, fontScale, highContrast]
+  );
   return (
     <>
-      <Text style={bottomStyles.label}>Where do you want to start?</Text>
+      <Text style={styles.label}>Where do you want to start?</Text>
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
         <TextInput
-          style={[bottomStyles.input, { flex: 1 }]}
+          style={[styles.input, { flex: 1 }]}
           placeholder="Enter Start Point"
-          placeholderTextColor={colors.secondary[400]}
+          placeholderTextColor={highContrast ? themeColors.primary[900] : themeColors.secondary[400]}
           value={start}
           onChangeText={onChangeStart}
         />
         <Pressable
           style={({ pressed }) => [
-            bottomStyles.secondaryIconButton,
-            pressed && { backgroundColor: colors["oriental-pink"][700] },
+            styles.secondaryIconButton,
+            pressed && { backgroundColor: highContrast ? themeColors.primary[700] : themeColors.accent[700] },
           ]}
           onPress={onLocateStart}
         >
-          <AntDesign name="aim" size={24} color={colors["oriental-pink"][50]} />
+          <AntDesign name="aim" size={24} color={themeColors.secondary[50]} />
         </Pressable>
         <Pressable
           style={({ pressed }) => [
-            bottomStyles.primaryIconButton,
-            pressed && { backgroundColor: colors.primary[600] },
+            styles.primaryIconButton,
+            pressed && { backgroundColor: highContrast ? themeColors.primary[700] : themeColors.primary[600] },
           ]}
           onPress={onOpenCategoriesStart}
         >
-          <MaterialIcons name="category" size={24} color={colors.secondary[50]} />
+          <MaterialIcons name="category" size={24} color={themeColors.secondary[50]} />
         </Pressable>
       </View>
 
-      <Text style={[bottomStyles.label, { marginTop: 16 }]}>Where do you want to go?</Text>
+      <Text style={[styles.label, { marginTop: 16 }]}>Where do you want to go?</Text>
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
         <TextInput
-          style={[bottomStyles.input, { flex: 1 }]}
+          style={[styles.input, { flex: 1 }]}
           placeholder="Enter Destination"
-          placeholderTextColor={colors.secondary[400]}
+          placeholderTextColor={highContrast ? themeColors.primary[900] : themeColors.secondary[400]}
           value={dest}
           onChangeText={onChangeDest}
         />
         <Pressable
           style={({ pressed }) => [
-            bottomStyles.primaryIconButton,
-            pressed && { backgroundColor: colors.primary[600] },
+            styles.primaryIconButton,
+            pressed && { backgroundColor: highContrast ? themeColors.primary[700] : themeColors.primary[600] },
           ]}
           onPress={onOpenCategoriesDest}
         >
-          <MaterialIcons name="category" size={24} color={colors.secondary[50]} />
+          <MaterialIcons name="category" size={24} color={themeColors.secondary[50]} />
         </Pressable>
       </View>
 
       <Pressable
         style={({ pressed }) => [
-          bottomStyles.primaryButton,
-          pressed && { backgroundColor: colors["oriental-pink"][700] },
+          styles.primaryButton,
+          pressed && { backgroundColor: highContrast ? themeColors.primary[700] : themeColors.accent[700] },
         ]}
-        onPress={onPressFind}
+        onPress={onExitPress}
       >
-        <Text style={bottomStyles.primaryButtonText}>Find nearest exit</Text>
-        <FontAwesome5 iconStyle="solid" name="door-open" size={24} color={colors["oriental-pink"][50]} />
+        <Text style={styles.primaryButtonText}>Find nearest exit</Text>
+        <FontAwesome5 name="door-open" iconStyle="solid" size={24} color={themeColors.accent[50]} />
       </Pressable>
     </>
   );
