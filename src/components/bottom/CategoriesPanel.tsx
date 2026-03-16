@@ -17,10 +17,10 @@ interface CategoriesPanelProps {
 }
 
 const ITEMS: CategoryItem[] = [
-  { lib: "fa", icon: "calendar", label: "Your Timetable" },
-  { lib: "fa", icon: "restroom", label: "Restroom" },
-  { lib: "material", icon: "coffee", label: "Food & Drinks" },
-  { lib: "material", icon: "elevator", label: "Elevator" },
+  { lib: "fa", icon: "calendar", label: "Your Timetable", style: "regular" },
+  { lib: "fa", icon: "toilet", label: "Restroom", style: "solid" },
+  { lib: "material", icon: "coffee", label: "Food & Drinks", style: "regular" },
+  { lib: "material", icon: "elevator", label: "Elevator", styler: "regular" },
 ];
 
 export default function CategoriesPanel({ onBack, onSelect }: CategoriesPanelProps) {
@@ -54,7 +54,7 @@ export default function CategoriesPanel({ onBack, onSelect }: CategoriesPanelPro
             onPress={() => onSelect(item.label)}
           >
             {item.lib === "fa" ? (
-              <FontAwesome5 name={item.icon as any} size={32} color={themeColors.primary[800]} />
+              <FontAwesome5 name={item.icon as any} iconStyle={item.style} size={32} color={themeColors.primary[800]} />
             ) : (
               <MaterialIcons name={item.icon as any} size={32} color={themeColors.primary[800]} />
             )}
