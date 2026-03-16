@@ -6,6 +6,7 @@ import MaterialIcons from '@react-native-vector-icons/material-icons';
 import Octicons from '@react-native-vector-icons/octicons';
 import React, { useMemo, useState } from "react";
 import { Pressable, ScrollView, Switch, Text, TextInput, View } from "react-native";
+import { authStore } from "../auth/auth.store";
 
 export default function Profile() {
   const {
@@ -42,31 +43,17 @@ export default function Profile() {
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Account</Text>
               <Text style={styles.sectionSubtitle}>
-                Connect to SEATS for timetable
+                Connection to SEATS for timetable
               </Text>
             </View>
           </View>
-
-
-          <TextInput
-            style={styles.input}
-            placeholder="Your name"
-            placeholderTextColor={themeColors.primary[500]}
-            value={name}
-            onChangeText={setName}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Your email"
-            placeholderTextColor={themeColors.primary[500]}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={setEmail}
-          />
-
-          <Pressable style={styles.loginButton} onPress={() => { }}>
-            <Text style={styles.loginButtonText}>Log In</Text>
+          // shows the currently logged in user
+          <View style={styles.accountInfo}>
+            <Text style={styles.accountLabel}>Logged in as:</Text>
+            <Text style={styles.accountValue}>John Smith</Text>
+          </View>
+          <Pressable style={styles.loginButton} onPress={() => authStore.logout()}>
+            <Text style={styles.loginButtonText}>Log out</Text>
           </Pressable>
         </View>
 
