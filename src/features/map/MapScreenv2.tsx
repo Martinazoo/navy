@@ -1,128 +1,60 @@
-// MapScreen.tsx
-import React, { useRef, useState } from 'react';
-import { View, StyleSheet, Animated, Dimensions, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { observer } from 'mobx-react-lite';
-import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Polyline } from 'react-native-svg';
+import Svg, { Polyline } from 'react-native-svg';
 
 import Button from '../../components/Button';
-import { getRouteRequest } from '../../services/routeService';
-import { Point } from '../../types/route';
-import SVGComponent from '../../components/SVGComponent'; // <-- Importa aquí tu SVG dinámico
 
-const MAP_WIDTH = 1684;
-const MAP_HEIGHT = 2384;
-
-const INI_W = 750;
-const INI_H = 1100;
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
-
-const initialX = SCREEN_WIDTH / 2 - INI_W;
-const initialY = SCREEN_HEIGHT / 2 - INI_H;
+const pathE1C3 =
+"2176,5120 2176,5104 2176,5088 2176,5072 2176,5056 2176,5040 2176,5024 2176,5008 2176,4992 2176,4976 2176,4960 2176,4944 2176,4928 2176,4912 2176,4896 2176,4880 2176,4864 2176,4848 2176,4832 2176,4816 2176,4800 2176,4784 2176,4768 2176,4752 2176,4736 2176,4720 2176,4704 2176,4688 2176,4672 2176,4656 2176,4640 2176,4624 2176,4608 2176,4592 2176,4576 2176,4560 2176,4544 2192,4544 2208,4544 2224,4544 2240,4544";
 
 export default observer(function MapScreen() {
-  const [routePoints, setRoutePoints] = useState<Point[]>([]);
-  const [routeString, setRouteString] = useState('');
-  const [loading, setLoading] = useState(false);
-  const isDragging = useRef(false);
 
-  const handleGetRoute = async () => {
-    try {
-      setLoading(true);
-      const data = await getRouteRequest();
-      setRoutePoints(data.path);
-      setRouteString(data.pathString);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+  const [routeString, setRouteString] = useState('');
+
+  const showRoute = () => {
+    setRouteString(pathE1C3);
   };
 
-  const scale = useRef(new Animated.Value(1)).current;
-  const translateX = useRef(new Animated.Value(initialX)).current;
-  const translateY = useRef(new Animated.Value(initialY)).current;
-
-  const lastScale = useRef(1);
-  const lastOffset = useRef({ x: initialX, y: initialY });
-
-  const MIN_SCALE = 0.3;
-  const MAX_SCALE = 5;
-
-  const pinchGesture = Gesture.Pinch()
-    .onUpdate((e) => {
-      let newScale = lastScale.current * e.scale;
-      newScale = Math.min(Math.max(newScale, MIN_SCALE), MAX_SCALE);
-      scale.setValue(newScale);
-    })
-    .onEnd((e) => {
-      lastScale.current = Math.min(Math.max(lastScale.current * e.scale, MIN_SCALE), MAX_SCALE);
-    });
-
-  const panGesture = Gesture.Pan()
-    .onStart(() => {
-        isDragging.current = true;
-    })
-    .onUpdate((e) => {
-      const speedFactor = 1 / lastScale.current;
-      translateX.setValue(lastOffset.current.x + e.translationX * speedFactor);
-      translateY.setValue(lastOffset.current.y + e.translationY * speedFactor);
-    })
-    .onEnd((e) => {
-        const speedFactor = 1 / lastScale.current;
-        lastOffset.current.x += e.translationX * speedFactor;
-        lastOffset.current.y += e.translationY * speedFactor;
-        setTimeout(() => {
-            isDragging.current = false;
-        }, 100);
-    });
-
-  const composedGesture = Gesture.Simultaneous(pinchGesture, panGesture);
-
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <GestureDetector gesture={composedGesture}>
-          <Animated.View
-            style={{
-              flex: 1,
-              transform: [{ scale }, { translateX }, { translateY }],
-            }}
-          >
-            <SVGComponent
-              onPressElement={(id) => {
-                if (isDragging.current) return; 
-                Alert.alert('Elemento clicado', `Has clicado el elemento: ${id}`);
-              }}
-            />
+    <View style={styles.container}>
 
-            {routeString !== '' && (
-              <Polyline
-                points={routeString}
-                fill="none"
-                stroke="red"
-                strokeWidth="6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            )}
-          </Animated.View>
-        </GestureDetector>
+      <View style={styles.mapContainer}>
+        <Svg width="100%" height="100%" viewBox="0 0 6000 6000">
+          {routeString !== '' && (
+            <Polyline
+              points={routeString}
+              fill="none"
+              stroke="red"
+              strokeWidth="20"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          )}
+        </Svg>
       </View>
 
-      <Button
-        title={loading ? 'Calculando...' : 'Calcular ruta'}
-        onPress={handleGetRoute}
-        disabled={loading}
-      />
-    </GestureHandlerRootView>
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Mostrar Ruta"
+          onPress={showRoute}
+        />
+      </View>
+
+    </View>
   );
 });
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+
+  mapContainer: {
+    flex: 1,
+  },
+
+  buttonContainer: {
     padding: 20,
   },
 });
