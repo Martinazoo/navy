@@ -9,6 +9,7 @@ interface CategoryItem {
   lib: "fa" | "material";
   icon: string;
   label: string;
+  style?: "regular" | "solid";
 }
 
 interface CategoriesPanelProps {
@@ -20,7 +21,7 @@ const ITEMS: CategoryItem[] = [
   { lib: "fa", icon: "calendar", label: "Your Timetable", style: "regular" },
   { lib: "fa", icon: "toilet", label: "Restroom", style: "solid" },
   { lib: "material", icon: "coffee", label: "Food & Drinks", style: "regular" },
-  { lib: "material", icon: "elevator", label: "Elevator", styler: "regular" },
+  { lib: "material", icon: "elevator", label: "Elevator", style: "regular" },
 ];
 
 export default function CategoriesPanel({ onBack, onSelect }: CategoriesPanelProps) {
