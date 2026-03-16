@@ -50,7 +50,7 @@ export default function Profile() {
           // shows the currently logged in user
           <View style={styles.accountInfo}>
             <Text style={styles.accountLabel}>Logged in as:</Text>
-            <Text style={styles.accountValue}>John Smith</Text>
+            <Text style={styles.accountValue}>{authStore.isAuthenticated ? authStore.user?.name : "Not logged in"}</Text>
           </View>
           <Pressable style={styles.loginButton} onPress={() => authStore.logout()}>
             <Text style={styles.loginButtonText}>Log out</Text>
