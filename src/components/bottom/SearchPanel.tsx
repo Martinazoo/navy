@@ -50,7 +50,7 @@ export default function SearchPanel({
           ]}
           onPress={onLocateStart}
         >
-          <AntDesign name="aim" size={24} color={themeColors.secondary[50]} />
+          <MaterialIcons name="my-location" size={24} color={themeColors.secondary[50]} />
         </Pressable>
         <Pressable
           style={({ pressed }) => [
