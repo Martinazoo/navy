@@ -1,7 +1,8 @@
 import { useTheme } from "../../constants/ThemeContext";
-import React, { useMemo, useState } from "react";
-import { Modal, Pressable, Text, View } from "react-native";
+import React, { useMemo, useRef, useState } from "react";
+import { Animated, Dimensions, Modal, Pressable, Text, View } from "react-native";
 import NfcManager, { NfcTech } from "react-native-nfc-manager";
+import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 
 import CategoriesPanel from "../../components/bottom/CategoriesPanel";
 import SchedulePanel from "../../components/bottom/SchedulePanel";
@@ -12,7 +13,6 @@ import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 import { scheduleDataTable } from "../../constants/scheduleData";
 import { createIndexStyles } from "../../constants/styles/indexStyles";
-import { set } from "mobx";
 
 const scheduleData = scheduleDataTable;
 const BUILDING_OPTIONS = ["Building A", "Building W", "Building M", "Building C"];
@@ -23,6 +23,9 @@ type CategoryField = "start" | "dest" | null;
 
 export default function Index() {
   const { colors: themeColors, highContrast, fontScale } = useTheme();
+  const { height: SCREEN_HEIGHT } = Dimensions.get("window");
+  const MIN_PANEL_HEIGHT = 120;
+  const MAX_PANEL_HEIGHT = SCREEN_HEIGHT * 0.33;
 
   const [start, setStart] = useState("");
   const [dest, setDest] = useState("");
@@ -35,6 +38,9 @@ export default function Index() {
   const [isNfcPopupVisible, setIsNfcPopupVisible] = useState(false);
   const [nfcPopupMessage, setNfcPopupMessage] = useState("");
   const [nfcMessageIcon, setNfcMessageIcon] = useState("");
+
+  const panelHeight = useRef(new Animated.Value(MIN_PANEL_HEIGHT)).current;
+  const lastOffset = useRef(MIN_PANEL_HEIGHT);
 
   const styles = useMemo(
     () => createIndexStyles(themeColors, highContrast, fontScale),
@@ -110,112 +116,156 @@ export default function Index() {
       }
     }
   };
+  
+  const panGesture = Gesture.Pan()
+    .onUpdate((e) => {
+      let newHeight = lastOffset.current - e.translationY;
+      if (newHeight < MIN_PANEL_HEIGHT) newHeight = MIN_PANEL_HEIGHT;
+      if (newHeight > MAX_PANEL_HEIGHT) newHeight = MAX_PANEL_HEIGHT;
+      panelHeight.setValue(newHeight);
+    })
+    .onEnd((e) => {
+      let newHeight = lastOffset.current - e.translationY;
+      if (newHeight < MIN_PANEL_HEIGHT) newHeight = MIN_PANEL_HEIGHT;
+      if (newHeight > MAX_PANEL_HEIGHT) newHeight = MAX_PANEL_HEIGHT;
+      lastOffset.current = newHeight;
+      panelHeight.setValue(newHeight);
+    });
 
   return (
-    <View style={styles.container}>
-      <TopControls
-        styles={styles}
-        themeColors={themeColors}
-        highContrast={highContrast}
-        selectedBuilding={selectedBuilding}
-        selectedFloor={selectedFloor}
-        showBuildingDropdown={showBuildingDropdown}
-        showFloorDropdown={showFloorDropdown}
-        buildingOptions={BUILDING_OPTIONS}
-        floorOptions={FLOOR_OPTIONS}
-        onToggleBuildingDropdown={toggleBuildingDropdown}
-        onToggleFloorDropdown={toggleFloorDropdown}
-        onSelectBuilding={(value) => {
-          setSelectedBuilding(value);
-          setShowBuildingDropdown(false);
-        }}
-        onSelectFloor={(value) => {
-          setSelectedFloor(value);
-          setShowFloorDropdown(false);
-        }}
-        onNFCPress={handleNFCPress}
-      />
-      <View style={styles.mapArea} />
-      <View style={styles.bottomPanel}>
-        {mode === "search" && (
-          <SearchPanel
-            start={start}
-            dest={dest}
-            onChangeStart={setStart}
-            onChangeDest={setDest}
-            onOpenCategoriesStart={() => {
-              openCategoryPicker("start");
-            }}
-            onLocateStart={() => {
-              setStart("Current location");
-            }}
-            onOpenCategoriesDest={() => {
-              openCategoryPicker("dest");
-            }}
-            onExitPress={() => {
-              setDest("Nearest Exit");
-            }}
-          />
-        )}
-        {mode === "categories" && (
-          <CategoriesPanel
-            onBack={() => setMode("search")}
-            onSelect={handleCategorySelect}
-          />
-        )}
-        {mode === "schedule" && (
-          <SchedulePanel
-            items={scheduleData}
-            onBack={() => setMode("search")}
-            onSelect={handleScheduleSelect}
-          />
-        )}
-      </View>
-
-      <Modal
-        animationType="fade"
-        transparent
-        visible={isNfcPopupVisible}
-        onRequestClose={() => setIsNfcPopupVisible(false)}
-      >
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "rgba(0, 0, 0, 0.75)",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 24,
+    <GestureHandlerRootView style={styles.container}>
+      <View style={styles.container}>
+        <TopControls
+          styles={styles}
+          themeColors={themeColors}
+          highContrast={highContrast}
+          selectedBuilding={selectedBuilding}
+          selectedFloor={selectedFloor}
+          showBuildingDropdown={showBuildingDropdown}
+          showFloorDropdown={showFloorDropdown}
+          buildingOptions={BUILDING_OPTIONS}
+          floorOptions={FLOOR_OPTIONS}
+          onToggleBuildingDropdown={toggleBuildingDropdown}
+          onToggleFloorDropdown={toggleFloorDropdown}
+          onSelectBuilding={(value) => {
+            setSelectedBuilding(value);
+            setShowBuildingDropdown(false);
           }}
+          onSelectFloor={(value) => {
+            setSelectedFloor(value);
+            setShowFloorDropdown(false);
+          }}
+          onNFCPress={handleNFCPress}
+        />
+        <View style={styles.mapArea} />
+        <Animated.View
+          style={[
+            styles.bottomPanel,
+            {
+              height: panelHeight,
+              overflow: "hidden",
+            },
+          ]}
+        >
+          <GestureDetector gesture={panGesture}>
+            <View
+              style={{
+                paddingVertical: 12,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <View
+                style={{
+                  width: 40,
+                  height: 4,
+                  backgroundColor: highContrast ? themeColors.primary[950] : themeColors.primary[400],
+                  borderRadius: 4,
+                }}
+              />
+            </View>
+          </GestureDetector>
+          
+          {mode === "search" && (
+            <SearchPanel
+              start={start}
+              dest={dest}
+              onChangeStart={setStart}
+              onChangeDest={setDest}
+              onOpenCategoriesStart={() => {
+                openCategoryPicker("start");
+              }}
+              onLocateStart={() => {
+                setStart("Current location");
+              }}
+              onOpenCategoriesDest={() => {
+                openCategoryPicker("dest");
+              }}
+              onExitPress={() => {
+                setDest("Nearest Exit");
+              }}
+            />
+          )}
+          {mode === "categories" && (
+            <CategoriesPanel
+              onBack={() => setMode("search")}
+              onSelect={handleCategorySelect}
+            />
+          )}
+          {mode === "schedule" && (
+            <SchedulePanel
+              items={scheduleData}
+              onBack={() => setMode("search")}
+              onSelect={handleScheduleSelect}
+            />
+          )}
+        </Animated.View>
+
+        <Modal
+          animationType="fade"
+          transparent
+          visible={isNfcPopupVisible}
+          onRequestClose={() => setIsNfcPopupVisible(false)}
         >
           <View
             style={{
-              backgroundColor: highContrast ? themeColors.primary[950] : themeColors.secondary[400],
-              borderRadius: 14,
-              paddingVertical: 18,
-              paddingHorizontal: 20,
-              width: "100%",
-              maxWidth: 320,
-              borderWidth: 2,
-              borderColor: highContrast ? themeColors.accent[100] : "transparent",
+              flex: 1,
+              backgroundColor: "rgba(0, 0, 0, 0.75)",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 24,
             }}
           >
-            <Pressable>
-              <MaterialIcons name="close" size={24} color={themeColors.primary[50]} onPress={() => setIsNfcPopupVisible(false)} />
-            </Pressable>
-            <MaterialIcons name={nfcMessageIcon} size={64} color={themeColors.accent[100]} style={{ alignSelf: "center", marginVertical: 12 }} />
-            <Text
+            <View
               style={{
-                color: highContrast ? themeColors.accent[100] : themeColors.primary[50],
-                fontSize: 18,
-                fontWeight: "700",
-                textAlign: "center",
+                backgroundColor: highContrast ? themeColors.primary[950] : themeColors.secondary[400],
+                borderRadius: 14,
+                paddingVertical: 18,
+                paddingHorizontal: 20,
+                width: "100%",
+                maxWidth: 320,
+                borderWidth: 2,
+                borderColor: highContrast ? themeColors.accent[100] : "transparent",
               }}
             >
-              {nfcPopupMessage}
-            </Text>
+              <Pressable>
+                <MaterialIcons name="close" size={24} color={themeColors.primary[50]} onPress={() => setIsNfcPopupVisible(false)} />
+              </Pressable>
+              <MaterialIcons name={nfcMessageIcon as any} size={64} color={themeColors.accent[100]} style={{ alignSelf: "center", marginVertical: 12 }} />
+              <Text
+                style={{
+                  color: highContrast ? themeColors.accent[100] : themeColors.primary[50],
+                  fontSize: 18,
+                  fontWeight: "700",
+                  textAlign: "center",
+                }}
+              >
+                {nfcPopupMessage}
+              </Text>
+            </View>
           </View>
-        </View>
-      </Modal>
-    </View>
+        </Modal>
+      </View>
+    </GestureHandlerRootView>
   );
 }
