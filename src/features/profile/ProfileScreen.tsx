@@ -2,6 +2,7 @@ import { COLOR_THEME_LABELS, FONT_SIZE_LABELS, THEME_COLORS } from "../../consta
 import { createProfileStyles } from "../../constants/styles/profileStyles";
 import { useTheme } from "../../constants/ThemeContext";
 import AntDesign from '@react-native-vector-icons/ant-design';
+import Ionicons from "@react-native-vector-icons/ionicons";
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 import Octicons from '@react-native-vector-icons/octicons';
 import React, { useMemo, useState } from "react";
@@ -37,7 +38,7 @@ export default function Profile() {
         <View style={styles.card}>
           <View style={styles.sectionHeaderSection}>
             <View style={styles.sectionIcon}>
-              <Octicons name="person" size={24} color={themeColors.primary[50]} />
+              <Ionicons name="person" size={24} color={themeColors.primary[50]} />
             </View>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Account</Text>
@@ -86,7 +87,7 @@ export default function Profile() {
           <View style={styles.settingRowColumn}>
             <View style={styles.sectionHeaderSection}>
               <View style={styles.subSectionIcon}>
-                <AntDesign name="font-size" size={16} color={themeColors.primary[50]} />
+                <MaterialIcons name="text-fields" size={16} color={themeColors.primary[50]} />
               </View>
               <View>
                 <Text style={styles.settingLabel}>Font Size</Text>
@@ -187,7 +188,7 @@ export default function Profile() {
           <View style={[styles.settingRow, styles.settingRowLast]}>
             <View style={styles.sectionHeaderSection}>
               <View style={styles.subSectionIcon}>
-                <AntDesign name="sound" size={24} color={themeColors.primary[50]} />
+                <MaterialIcons name="volume-up" size={24} color={themeColors.primary[50]} />
               </View>
               <View>
                 <Text style={styles.settingLabel}>Audio Instructions</Text>
