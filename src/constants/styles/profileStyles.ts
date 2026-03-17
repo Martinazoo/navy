@@ -76,15 +76,23 @@ export const createProfileStyles = (
     fontSize: 13 * fontScale,
     color: colors.primary[700],
   },
-  input: {
-    height: 50,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    backgroundColor: highContrast ? colors.primary[50] : colors.primary[50],
-    color: highContrast ? colors.primary[950] : colors.primary[950],
+  accountInfo: {
+    marginTop: 4,
+    padding: 12,
+    backgroundColor: highContrast ? colors.primary[50] : colors.primary[100],
+    borderRadius: 12,
     borderWidth: highContrast ? 2 : 0,
     borderColor: highContrast ? colors.primary[950] : "transparent",
-    marginBottom: 12,
+  },
+  accountLabel: {
+    fontSize: 14 * fontScale,
+    color: colors.primary[700],
+    marginBottom: 4,
+  },
+  accountValue: {
+    fontSize: 16 * fontScale,
+    fontWeight: "600",
+    color: colors.primary[900],
   },
   loginButton: {
     marginTop: 8,

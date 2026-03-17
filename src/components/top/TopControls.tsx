@@ -20,6 +20,7 @@ interface TopControlsProps {
   onToggleFloorDropdown: () => void;
   onSelectBuilding: (value: string) => void;
   onSelectFloor: (value: string) => void;
+  onNFCPress: () => void;
 }
 
 export default function TopControls({
@@ -36,6 +37,7 @@ export default function TopControls({
   onToggleFloorDropdown,
   onSelectBuilding,
   onSelectFloor,
+  onNFCPress
 }: TopControlsProps) {
   return (
     <View style={styles.dropdownRow}>
@@ -71,7 +73,7 @@ export default function TopControls({
       />
 
       <Pressable style={({ pressed }) => [styles.connectButton, pressed && styles.connectButtonPressed]}>
-        <MaterialIcons name="cast-connected" size={24} color={themeColors.accent[100]} />
+        <MaterialIcons name="cast-connected" size={24} color={themeColors.accent[100]} onPress={onNFCPress} />
       </Pressable>
     </View>
   );

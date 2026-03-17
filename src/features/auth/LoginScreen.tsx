@@ -8,6 +8,7 @@ import { loginRequest } from './auth.service';
 import { LoginResponse } from '../../types/login';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../types/stack'; 
+import { colors } from '../../constants/colours';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
@@ -53,7 +54,7 @@ export default observer(function LoginScreen({ navigation }: Props) {
 });
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, justifyContent: 'center' },
-  title: { fontSize: 28, fontWeight: 'bold', marginBottom: 20 },
-  registerText: { marginTop: 20, color: '#007AFF', textAlign: 'center' },
+  container: { flex: 1, padding: 20, justifyContent: 'center', backgroundColor: colors.primary[500] },
+  title: { fontSize: 28, fontWeight: 'bold', marginBottom: 20, color: colors.primary[50] },
+  registerText: { marginTop: 20, color: colors.primary[200], textAlign: 'center' },
 });

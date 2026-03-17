@@ -19,7 +19,7 @@ export const createIndexStyles = (
     },
     bottomPanel: {
       paddingHorizontal: 20,
-      paddingTop: 20,
+      paddingTop: 8,
       paddingBottom: 30,
       backgroundColor: highContrast ? themeColors.primary[50] : themeColors.primary[800],
       borderTopLeftRadius: 20,
