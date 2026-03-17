@@ -62,8 +62,8 @@ export default observer(function RegisterScreen({ navigation }: Props) {
 });
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, justifyContent: 'center', backgroundColor: colors.primary[50] },
-  title: { fontSize: 28, fontWeight: 'bold', marginBottom: 20, color: colors.primary[950] },
-  loginText: { marginTop: 20, color: colors.primary[700], textAlign: 'center' },
+  container: { flex: 1, padding: 20, justifyContent: 'center', backgroundColor: colors.primary[500] },
+  title: { fontSize: 28, fontWeight: 'bold', marginBottom: 20, color: colors.primary[50] },
+  loginText: { marginTop: 20, color: colors.primary[200], textAlign: 'center' },
 
 });

@@ -1,14 +1,18 @@
 import { useTheme } from "../../constants/ThemeContext";
 import React, { useMemo, useState } from "react";
-import { View } from "react-native";
+import { Modal, Pressable, Text, View } from "react-native";
+import NfcManager, { NfcTech } from "react-native-nfc-manager";
 
 import CategoriesPanel from "../../components/bottom/CategoriesPanel";
 import SchedulePanel from "../../components/bottom/SchedulePanel";
 import SearchPanel from "../../components/bottom/SearchPanel";
 import TopControls from "../../components/top/TopControls";
 
+import MaterialIcons from "@react-native-vector-icons/material-icons";
+
 import { scheduleDataTable } from "../../constants/scheduleData";
 import { createIndexStyles } from "../../constants/styles/indexStyles";
+import { set } from "mobx";
 
 const scheduleData = scheduleDataTable;
 const BUILDING_OPTIONS = ["Building A", "Building W", "Building M", "Building C"];
@@ -28,6 +32,9 @@ export default function Index() {
   const [selectedFloor, setSelectedFloor] = useState(FLOOR_OPTIONS[0]);
   const [showBuildingDropdown, setShowBuildingDropdown] = useState(false);
   const [showFloorDropdown, setShowFloorDropdown] = useState(false);
+  const [isNfcPopupVisible, setIsNfcPopupVisible] = useState(false);
+  const [nfcPopupMessage, setNfcPopupMessage] = useState("");
+  const [nfcMessageIcon, setNfcMessageIcon] = useState("");
 
   const styles = useMemo(
     () => createIndexStyles(themeColors, highContrast, fontScale),
@@ -74,6 +81,36 @@ export default function Index() {
     setMode("search");
   };
 
+  const handleNFCPress = async () => {
+    setNfcPopupMessage("Tap phone to checkpoint");
+    setNfcMessageIcon("contactless");
+    setIsNfcPopupVisible(true);
+
+    try {
+      await NfcManager.start();
+      await NfcManager.requestTechnology(NfcTech.Ndef);
+      const tag = await NfcManager.getTag();
+
+      if (tag) {
+        setNfcPopupMessage("Successfully scanned");
+        setNfcMessageIcon("check-circle");
+        setStart("Checkpoint");
+        setTimeout(() => {
+          setIsNfcPopupVisible(false);
+        }, 1500);
+      }
+    } catch {
+      setNfcPopupMessage("Tap phone to checkpoint");
+      setNfcMessageIcon("contactless");
+    } finally {
+      try {
+        await NfcManager.cancelTechnologyRequest();
+      } catch {
+        console.warn("Failed to cancel NFC request");
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
       <TopControls
@@ -96,6 +133,7 @@ export default function Index() {
           setSelectedFloor(value);
           setShowFloorDropdown(false);
         }}
+        onNFCPress={handleNFCPress}
       />
       <View style={styles.mapArea} />
       <View style={styles.bottomPanel}>
@@ -133,6 +171,51 @@ export default function Index() {
           />
         )}
       </View>
+
+      <Modal
+        animationType="fade"
+        transparent
+        visible={isNfcPopupVisible}
+        onRequestClose={() => setIsNfcPopupVisible(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0, 0, 0, 0.75)",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 24,
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: highContrast ? themeColors.primary[950] : themeColors.secondary[400],
+              borderRadius: 14,
+              paddingVertical: 18,
+              paddingHorizontal: 20,
+              width: "100%",
+              maxWidth: 320,
+              borderWidth: 2,
+              borderColor: highContrast ? themeColors.accent[100] : "transparent",
+            }}
+          >
+            <Pressable>
+              <MaterialIcons name="close" size={24} color={themeColors.primary[50]} onPress={() => setIsNfcPopupVisible(false)} />
+            </Pressable>
+            <MaterialIcons name={nfcMessageIcon} size={64} color={themeColors.accent[100]} style={{ alignSelf: "center", marginVertical: 12 }} />
+            <Text
+              style={{
+                color: highContrast ? themeColors.accent[100] : themeColors.primary[50],
+                fontSize: 18,
+                fontWeight: "700",
+                textAlign: "center",
+              }}
+            >
+              {nfcPopupMessage}
+            </Text>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
