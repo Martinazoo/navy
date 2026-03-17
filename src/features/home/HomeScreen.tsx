@@ -39,8 +39,8 @@ export default function Index() {
   const [nfcPopupMessage, setNfcPopupMessage] = useState("");
   const [nfcMessageIcon, setNfcMessageIcon] = useState("");
 
-  const panelHeight = useRef(new Animated.Value(MIN_PANEL_HEIGHT)).current;
-  const lastOffset = useRef(MIN_PANEL_HEIGHT);
+  const panelHeight = useRef(new Animated.Value(MAX_PANEL_HEIGHT)).current;
+  const lastOffset = useRef(MAX_PANEL_HEIGHT);
 
   const styles = useMemo(
     () => createIndexStyles(themeColors, highContrast, fontScale),
