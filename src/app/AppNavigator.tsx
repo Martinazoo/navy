@@ -49,7 +49,7 @@ export default function AppNavigator() {
             let iconName: React.ComponentProps<typeof Ionicons>['name'] = 'help-outline';
 
             if (route.name === 'Home') {
-              iconName = 'home-outline';
+              iconName = 'map-outline';
             } else if (route.name === 'Profile') {
               iconName = 'person-outline';
             } else if (route.name === 'Map') {
@@ -63,8 +63,8 @@ export default function AppNavigator() {
         })}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Map" component={MapScreen} />
-        <Tab.Screen name="Map2" component={MapScreen2} />
+        {/* <Tab.Screen name="Map" component={MapScreen} /> */}
+        {/* <Tab.Screen name="Map2" component={MapScreen2} /> */}
         <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
     </View>
