@@ -51,6 +51,7 @@ export default function SearchPanel({
           onPress={onLocateStart}
         >
           <MaterialIcons name="my-location" size={24} color={themeColors.secondary[50]} />
+          <Text style={styles.iconButtonLabel}>Current Location</Text>
         </Pressable>
         <Pressable
           style={({ pressed }) => [
@@ -60,6 +61,7 @@ export default function SearchPanel({
           onPress={onOpenCategoriesStart}
         >
           <MaterialIcons name="category" size={24} color={themeColors.secondary[50]} />
+          <Text style={styles.iconButtonLabel}>Categories</Text>
         </Pressable>
       </View>
 
@@ -80,6 +82,7 @@ export default function SearchPanel({
           onPress={onOpenCategoriesDest}
         >
           <MaterialIcons name="category" size={24} color={themeColors.secondary[50]} />
+          <Text style={styles.iconButtonLabel}>Categories</Text>
         </Pressable>
       </View>
 
