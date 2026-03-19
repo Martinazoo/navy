@@ -28,7 +28,7 @@ export default function ScheduleItem({ item, onPress }: ScheduleItemProps) {
   return (
     <Pressable
       style={styles.scheduleItem}
-      onPress={() => onPress(item.title)}
+      onPress={() => onPress(item.room)}
     >
       <View style={{ flexDirection: "column", justifyContent: "space-between", flex: 1 }}>
         <Text style={styles.scheduleTitle}>{item.title}</Text>

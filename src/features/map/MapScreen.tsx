@@ -29,19 +29,17 @@ interface MapScreenProps {
   routeString?: string;
 }
 
-export default observer(function MapScreen({ startAndEnd = false, routeTriggerKey = '', routeString: routeStringFromHome = '' }: MapScreenProps) {
-  const [routeString, setRouteString] = useState('');
+export default observer(function MapScreen({ startAndEnd = false, routeTriggerKey = '', routeString = ''}: MapScreenProps) {
   const [userPos, setUserPos] = useState<{ posX: number; posY: number } | null>(null);
   const [loading, setLoading] = useState(false);
-  const routeToRender = routeStringFromHome || routeString;
   
   const scaleX = (num: number) => num * SCALE_X; 
   const scaleY = (num: number) => num * SCALE_Y;
-
+  /*
   const handleGetRoute = async () => {
     try {
       setLoading(true);
-      const data = await getRouteRequest();
+      const data = await getRouteRequest(start, end);
       let routeString = scalePathString(data.pathString, SCALE_X, SCALE_Y);
       setRouteString(routeString);
     } catch (error) {
@@ -50,6 +48,7 @@ export default observer(function MapScreen({ startAndEnd = false, routeTriggerKe
       setLoading(false);
     }
   };
+  */
 
   const loadElements = async () => {
     const userPos = await getUserPosition();
@@ -62,12 +61,13 @@ export default observer(function MapScreen({ startAndEnd = false, routeTriggerKe
     void loadElements();
   }, []);
 
-
+/*
   useEffect(() => {
     if (startAndEnd && routeTriggerKey) {
       void handleGetRoute();
     }
   }, [startAndEnd, routeTriggerKey]);
+  */
 
   const scale = useRef(new Animated.Value(1)).current;
   const translateX = useRef(new Animated.Value(initialX)).current;
@@ -142,9 +142,9 @@ export default observer(function MapScreen({ startAndEnd = false, routeTriggerKe
               
               <GcuMapExact />
 
-              {routeToRender !== '' && (
+              {routeString !== '' && (
                 <Polyline
-                  points={routeToRender}
+                  points={routeString}
                   fill="none"
                   stroke="blue"
                   strokeWidth="4"

@@ -4,6 +4,8 @@ export interface Point {
 }
 
 export interface RouteResponse {
+  start: string;
+  end: string;
   path: Point[];
   pathString: string;
 }
