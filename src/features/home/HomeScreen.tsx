@@ -159,7 +159,8 @@ export default function Index() {
       if (tag) {
         setNfcPopupMessage("Successfully scanned");
         setNfcMessageIcon("check-circle");
-        setStart("Checkpoint");
+        setStart("C1");
+        setDest("C2");
         setTimeout(() => {
           setIsNfcPopupVisible(false);
         }, 1500);
