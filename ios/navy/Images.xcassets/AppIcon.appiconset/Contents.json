@@ -31,17 +31,19 @@
       "size" : "40x40"
     },
     {
+      "filename" : "smalllogo.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
+      "filename" : "madiumlogo.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "logo 1024 (1) (1).png",
+      "filename" : "biglogo.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
