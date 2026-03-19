@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Animated, Dimensions, Alert } from 'react-native';
 import { observer } from 'mobx-react-lite';
-import Svg, { G, Polyline } from 'react-native-svg';
+import Svg, { Circle, G, Polyline } from 'react-native-svg';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import Button from '../../components/Button';
@@ -11,6 +11,7 @@ import GcuMapBig from '../../utils/maps/gcuMap_v5.svg';
 import GcuMap from '../../utils/maps/gcuMap_v2.svg';
 import GcuMap3 from '../../utils/maps/gcuMap_v3.svg';
 import GcuMapExact from '../../utils/maps/exact_v6.svg';
+import { getUserPosition } from '../../services/user';
 
 const MAP_WIDTH = 1684; //1684 //5018
 const MAP_HEIGHT = 2384; //2384 //7060
@@ -38,6 +39,7 @@ interface MapScreenProps {
 export default observer(function MapScreen({ startAndEnd = false, routeTriggerKey = '', routeString: routeStringFromHome = '' }: MapScreenProps) {
   const [routePoints, setRoutePoints] = useState<Point[]>([]);
   const [routeString, setRouteString] = useState('');
+  const [userPos, setUserPos] = useState<{ posX: number; posY: number } | null>(null);
   const [loading, setLoading] = useState(false);
   const routeToRender = routeStringFromHome || routeString;
 
@@ -46,6 +48,9 @@ export default observer(function MapScreen({ startAndEnd = false, routeTriggerKe
     let routeString = scalePathString(pathE1C3_scaled, SCALE_X, SCALE_Y);
     setRouteString(routeString);
   };
+  
+  const scaleX = (num: number) => num * SCALE_X; 
+  const scaleY = (num: number) => num * SCALE_Y;
 
   const handleGetRoute = async () => {
     try {
@@ -61,6 +66,18 @@ export default observer(function MapScreen({ startAndEnd = false, routeTriggerKe
       setLoading(false);
     }
   };
+
+  const loadElements = async () => {
+    const userPos = await getUserPosition();
+    userPos.posX = scaleX(userPos.posX);
+    userPos.posY = scaleY(userPos.posY);
+    setUserPos(userPos);
+  };
+
+  useEffect(() => {
+    void loadElements();
+  }, []);
+
 
   useEffect(() => {
     if (startAndEnd && routeTriggerKey) {
@@ -151,6 +168,9 @@ export default observer(function MapScreen({ startAndEnd = false, routeTriggerKe
                   strokeLinejoin="round"
                 />
               )}
+              {userPos && (
+                <Circle cx={userPos.posX} cy={userPos.posY} r="5" fill="blue" />
+              )}
             </Svg>
           </Animated.View>
         </GestureDetector>
@@ -170,5 +190,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     overflow: 'hidden',
+    backgroundColor: '#f3af7',
   },
 });
