@@ -1,4 +1,4 @@
-import { ThemeColors } from "@/constants/themes";
+import { ThemeColors } from "../themes";
 import { StyleSheet } from "react-native";
 
 export const createIndexStyles = (
@@ -14,6 +14,7 @@ export const createIndexStyles = (
     mapArea: {
       flex: 1,
       backgroundColor: themeColors.primary[50],
+      overflow: "hidden",
       borderColor: highContrast ? themeColors.primary[950] : "transparent",
       borderWidth: highContrast ? 2 : 0,
     },
@@ -32,6 +33,8 @@ export const createIndexStyles = (
       alignItems: "flex-start",
       padding: 20,
       gap: 10,
+      zIndex: 20,
+      elevation: 20,
     },
     dropdownContainer: {
       flex: 1,

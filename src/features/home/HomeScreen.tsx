@@ -1,5 +1,5 @@
 import { useTheme } from "../../constants/ThemeContext";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Animated, Dimensions, Modal, Pressable, Text, View } from "react-native";
 import NfcManager, { NfcTech } from "react-native-nfc-manager";
 import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
@@ -13,6 +13,8 @@ import MaterialIcons from "@react-native-vector-icons/material-icons";
 
 import { scheduleDataTable } from "../../constants/scheduleData";
 import { createIndexStyles } from "../../constants/styles/indexStyles";
+import { getRouteRequest } from "../../services/routeService";
+import MapScreen from "../map/MapScreen";
 
 const scheduleData = scheduleDataTable;
 const BUILDING_OPTIONS = ["Building A", "Building W", "Building M", "Building C"];
@@ -26,6 +28,7 @@ export default function Index() {
   const { height: SCREEN_HEIGHT } = Dimensions.get("window");
   const MIN_PANEL_HEIGHT = 120;
   const MAX_PANEL_HEIGHT = SCREEN_HEIGHT * 0.33;
+  
 
   const [start, setStart] = useState("");
   const [dest, setDest] = useState("");
@@ -38,6 +41,7 @@ export default function Index() {
   const [isNfcPopupVisible, setIsNfcPopupVisible] = useState(false);
   const [nfcPopupMessage, setNfcPopupMessage] = useState("");
   const [nfcMessageIcon, setNfcMessageIcon] = useState("");
+  const [routeString, setRouteString] = useState("");
 
   const panelHeight = useRef(new Animated.Value(MAX_PANEL_HEIGHT)).current;
   const lastOffset = useRef(MAX_PANEL_HEIGHT);
@@ -46,6 +50,45 @@ export default function Index() {
     () => createIndexStyles(themeColors, highContrast, fontScale),
     [themeColors, highContrast, fontScale]
   );
+
+  const routeTriggerKey = useMemo(() => {
+    const normalizedStart = start.trim();
+    const normalizedDest = dest.trim();
+    if (!normalizedStart || !normalizedDest) {
+      return "";
+    }
+
+    return `${normalizedStart}::${normalizedDest}`;
+  }, [start, dest]);
+
+  useEffect(() => {
+    if (!routeTriggerKey) {
+      setRouteString("");
+      return;
+    }
+
+    let isMounted = true;
+
+    const fetchRoute = async () => {
+      try {
+        const data = await getRouteRequest();
+        if (isMounted) {
+          setRouteString(data.pathString);
+        }
+      } catch (error) {
+        console.error(error);
+        if (isMounted) {
+          setRouteString("");
+        }
+      }
+    };
+
+    void fetchRoute();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [routeTriggerKey]);
 
   const toggleBuildingDropdown = () => {
     setShowBuildingDropdown((prev) => !prev);
@@ -157,10 +200,9 @@ export default function Index() {
           }}
           onNFCPress={handleNFCPress}
         />
-        <View style={styles.mapArea}
-        
-        
-        />
+        <View style={styles.mapArea}>
+          <MapScreen routeString={routeString} />
+        </View>
         <Animated.View
           style={[
             styles.bottomPanel,

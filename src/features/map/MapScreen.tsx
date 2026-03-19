@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Animated, Dimensions, Alert } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import Svg, { G, Polyline } from 'react-native-svg';
@@ -29,13 +29,17 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const initialX = SCREEN_WIDTH / 2 - INI_W;
 const initialY = SCREEN_HEIGHT / 2 - INI_H;
 
+interface MapScreenProps {
+  startAndEnd?: boolean;
+  routeTriggerKey?: string;
+  routeString?: string;
+}
 
-
-
-export default observer(function MapScreen() {
+export default observer(function MapScreen({ startAndEnd = false, routeTriggerKey = '', routeString: routeStringFromHome = '' }: MapScreenProps) {
   const [routePoints, setRoutePoints] = useState<Point[]>([]);
   const [routeString, setRouteString] = useState('');
   const [loading, setLoading] = useState(false);
+  const routeToRender = routeStringFromHome || routeString;
 
   const showRoute = async () => {
     Alert.alert('Route');
@@ -58,6 +62,11 @@ export default observer(function MapScreen() {
     }
   };
 
+  useEffect(() => {
+    if (startAndEnd && routeTriggerKey) {
+      void handleGetRoute();
+    }
+  }, [startAndEnd, routeTriggerKey]);
 
   const scale = useRef(new Animated.Value(1)).current;
   const translateX = useRef(new Animated.Value(initialX)).current;
@@ -132,9 +141,9 @@ export default observer(function MapScreen() {
               
               <GcuMapExact />
 
-              {routeString !== '' && (
+              {routeToRender !== '' && (
                 <Polyline
-                  points={routeString}
+                  points={routeToRender}
                   fill="none"
                   stroke="blue"
                   strokeWidth="4"
@@ -147,11 +156,11 @@ export default observer(function MapScreen() {
         </GestureDetector>
       </View>
 
-      <Button
+      {/* <Button
         title={loading ? 'Calculating...' : 'Calculate Route'}
         onPress={showRoute}
         disabled={loading}
-      />
+      /> */}
     </GestureHandlerRootView>
   );
 });
@@ -160,5 +169,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    overflow: 'hidden',
   },
 });
