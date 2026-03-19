@@ -157,7 +157,10 @@ export default function Index() {
           }}
           onNFCPress={handleNFCPress}
         />
-        <View style={styles.mapArea} />
+        <View style={styles.mapArea}
+        
+        
+        />
         <Animated.View
           style={[
             styles.bottomPanel,
