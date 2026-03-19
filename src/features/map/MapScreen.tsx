@@ -149,14 +149,14 @@ export default observer(function MapScreen({ startAndEnd = false, routeTriggerKe
                 <Polyline
                   points={routeString}
                   fill="none"
-                  stroke="#F3FAF7"
+                  stroke="#DCEBE7"
                   strokeWidth="4"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
               )}
               {userPos && (
-                <Circle cx={userPos.posX} cy={userPos.posY} r="5" fill="blue" />
+                <Circle cx={userPos.posX} cy={userPos.posY} r="10" fill="#DCEBE7" stroke="#264A45" strokeWidth="1"/>
               )}
             </Svg>
           </Animated.View>
