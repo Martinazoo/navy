@@ -146,7 +146,7 @@ export default observer(function MapScreen({ startAndEnd = false, routeTriggerKe
                 <Polyline
                   points={routeString}
                   fill="none"
-                  stroke="blue"
+                  stroke="#F3FAF7"
                   strokeWidth="4"
                   strokeLinecap="round"
                   strokeLinejoin="round"
