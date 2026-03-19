@@ -1,6 +1,5 @@
 import { createBottomStyles } from "../../constants/styles/bottomStyles";
 import { useTheme } from "../../constants/ThemeContext";
-import AntDesign from "@react-native-vector-icons/ant-design";
 import FontAwesome5 from "@react-native-vector-icons/fontawesome5";
 import MaterialIcons from "@react-native-vector-icons/material-icons";
 import React, { useMemo } from "react";
@@ -24,8 +23,8 @@ export default function SearchPanel({
   onChangeDest,
   onOpenCategoriesStart,
   onOpenCategoriesDest,
-  onLocateStart = () => {},
-  onExitPress = () => {  },
+  onLocateStart = () => { },
+  onExitPress = () => { },
 }: SearchPanelProps) {
   const { colors: themeColors, fontScale, highContrast } = useTheme();
   const styles = useMemo(
@@ -36,13 +35,18 @@ export default function SearchPanel({
     <>
       <Text style={styles.label}>Where do you want to start?</Text>
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-        <TextInput
-          style={[styles.input, { flex: 1 }]}
-          placeholder="Enter Start Point"
-          placeholderTextColor={highContrast ? themeColors.primary[900] : themeColors.secondary[400]}
-          value={start}
-          onChangeText={onChangeStart}
-        />
+        <View style={[styles.input, { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }]}>
+          <TextInput
+            style={[styles.input, { flex: 1, backgroundColor: "transparent", padding: 0 }]}
+            placeholder="Enter Start Point"
+            placeholderTextColor={highContrast ? themeColors.primary[900] : themeColors.secondary[400]}
+            value={start}
+            onChangeText={onChangeStart}
+          />
+          <Pressable onPress={() => onChangeStart("")}>
+            <MaterialIcons name="close" size={16} color={themeColors.secondary[400]} />
+          </Pressable>
+        </View>
         <Pressable
           style={({ pressed }) => [
             styles.secondaryIconButton,
@@ -67,13 +71,20 @@ export default function SearchPanel({
 
       <Text style={[styles.label, { marginTop: 16 }]}>Where do you want to go?</Text>
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-        <TextInput
-          style={[styles.input, { flex: 1 }]}
-          placeholder="Enter Destination"
-          placeholderTextColor={highContrast ? themeColors.primary[900] : themeColors.secondary[400]}
-          value={dest}
-          onChangeText={onChangeDest}
-        />
+        <View style={[styles.input, { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }]}>
+          <TextInput
+            style={[styles.input, { flex: 1, backgroundColor: "transparent" }]}
+            placeholder="Enter Destination"
+            placeholderTextColor={highContrast ? themeColors.primary[900] : themeColors.secondary[400]}
+            value={dest}
+            onChangeText={onChangeDest}
+          />
+          <Pressable onPress={() => onChangeDest("")}>
+            <MaterialIcons name="close" size={16} color={themeColors.secondary[400]} />
+          </Pressable>
+        </View>
+
+
         <Pressable
           style={({ pressed }) => [
             styles.primaryIconButton,

@@ -12,6 +12,6 @@ export const RootNavigator = observer(() => {
 
   if (authStore.isLoading) return <SplashScreen />;
 
-  return authStore.isAuthenticated ? <AppNavigator /> : <AuthNavigator />;
-  //return <AppNavigator />;
+  //return authStore.isAuthenticated ? <AppNavigator /> : <AuthNavigator />;
+  return <AppNavigator />;
 });
