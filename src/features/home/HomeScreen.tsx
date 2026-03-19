@@ -15,6 +15,7 @@ import { scheduleDataTable } from "../../constants/scheduleData";
 import { createIndexStyles } from "../../constants/styles/indexStyles";
 import { getRouteRequest } from "../../services/routeService";
 import MapScreen from "../map/MapScreen";
+import { set } from "mobx";
 
 const scheduleData = scheduleDataTable;
 const BUILDING_OPTIONS = ["Building A", "Building W", "Building M", "Building C"];
@@ -75,6 +76,7 @@ export default function Index() {
 
     return `${normalizedStart}::${normalizedDest}`;
   }, [start, dest]);
+
 
   useEffect(() => {
     if (!routeTriggerKey) {
@@ -264,7 +266,8 @@ export default function Index() {
                 openCategoryPicker("dest");
               }}
               onExitPress={() => {
-                setDest("Nearest Exit");
+                setStart("UserLoc");
+                setDest("E2");
               }}
             />
           )}
