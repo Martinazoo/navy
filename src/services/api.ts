@@ -2,8 +2,9 @@ import axios from 'axios';
 import Config from "react-native-config";
 import { authStore } from '../features/auth/auth.store';
 
+
 export const api = axios.create({
-  baseURL: Config.API_URL,
+  baseURL: "http://172.20.10.3:8000",
 });
 
 api.interceptors.request.use((config) => {
