@@ -197,7 +197,8 @@ export default function Index() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.container}>
-        <TopControls
+        <View style={styles.mapArea}>
+          <TopControls
           styles={styles}
           themeColors={themeColors}
           highContrast={highContrast}
@@ -219,8 +220,9 @@ export default function Index() {
           }}
           onNFCPress={handleNFCPress}
         />
-        <View style={styles.mapArea}>
-          <MapScreen routeString={routeString} />
+          <View style={{ position: "absolute"}}>
+            <MapScreen routeString={routeString} />
+          </View>
         </View>
         <Animated.View
           style={[
