@@ -14,7 +14,7 @@ export const createIndexStyles = (
     mapArea: {
       flex: 1,
       backgroundColor: themeColors.primary[50],
-      overflow: "hidden",
+      overflow: "visible",
       borderColor: highContrast ? themeColors.primary[950] : "transparent",
       borderWidth: highContrast ? 2 : 0,
     },
@@ -26,6 +26,7 @@ export const createIndexStyles = (
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
       elevation: 5,
+      
     },
     dropdownRow: {
       flexDirection: "row",
