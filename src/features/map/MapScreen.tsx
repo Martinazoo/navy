@@ -102,7 +102,9 @@ export default observer(function MapScreen({ startAndEnd = false, routeTriggerKe
       scale.setValue(newScale);
     });
 
-  const panGesture = Gesture.Pan().onUpdate((e) => {
+  const panGesture = Gesture.Pan()
+    .maxPointers(1)
+    .onUpdate((e) => {
         const speedFactor = 1 / lastScale.current;
 
         translateX.setValue(
@@ -112,7 +114,8 @@ export default observer(function MapScreen({ startAndEnd = false, routeTriggerKe
         translateY.setValue(
         lastOffset.current.y + e.translationY * speedFactor
         );
-    }).onEnd((e) => {
+    })
+    .onEnd((e) => {
       const speedFactor = 1 / lastScale.current;
       lastOffset.current.x += e.translationX * speedFactor;
       lastOffset.current.y += e.translationY * speedFactor;

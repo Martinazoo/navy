@@ -220,7 +220,7 @@ export default function Index() {
           }}
           onNFCPress={handleNFCPress}
         />
-          <View style={{ position: "absolute"}}>
+            <View style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}>
             <MapScreen routeString={routeString} />
           </View>
         </View>
