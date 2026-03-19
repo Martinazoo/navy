@@ -1,7 +1,12 @@
 import { api } from './api';
 import { RouteResponse } from '../types/route';
 
-export const getRouteRequest = async (): Promise<RouteResponse> => {
-  const response = await api.get<RouteResponse>('/route/get_route');
+type RouteRequest = {
+  start: string;
+  end: string;
+};
+
+export const getRouteRequest = async (start: string, end: string): Promise<RouteResponse> => {
+  const response = await api.post<RouteResponse>('/route/path', {start,end,} as RouteRequest);
   return response.data;
 };

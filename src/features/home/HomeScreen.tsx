@@ -23,6 +23,13 @@ const FLOOR_OPTIONS = ["Floor 0", "Floor 1", "Floor 2", "Floor 3"];
 type PanelMode = "search" | "categories" | "schedule";
 type CategoryField = "start" | "dest" | null;
 
+const MAP_WIDTH = 1684; //1684 //5018
+const MAP_HEIGHT = 2384; //2384 //7060
+const TILE_X = 318; //314
+const TILE_Y = 452; //442
+const SCALE_X = MAP_WIDTH / TILE_X;
+const SCALE_Y = MAP_HEIGHT / TILE_Y;
+
 export default function Index() {
   const { colors: themeColors, highContrast, fontScale } = useTheme();
   const { height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -51,6 +58,14 @@ export default function Index() {
     [themeColors, highContrast, fontScale]
   );
 
+  function scalePathString(pathString: string, scaleX: number, scaleY: number): string {
+    return pathString
+      .split(" ").map(p => {
+        const [x, y] = p.split(",").map(Number);
+        return `${x * scaleX},${y * scaleY}`;
+      }).join(" ");
+  }
+
   const routeTriggerKey = useMemo(() => {
     const normalizedStart = start.trim();
     const normalizedDest = dest.trim();
@@ -71,9 +86,10 @@ export default function Index() {
 
     const fetchRoute = async () => {
       try {
-        const data = await getRouteRequest();
+        const data = await getRouteRequest(start, dest);
+        let routeString = scalePathString(data.pathString, SCALE_X, SCALE_Y);
         if (isMounted) {
-          setRouteString(data.pathString);
+          setRouteString(routeString);
         }
       } catch (error) {
         console.error(error);
@@ -82,7 +98,7 @@ export default function Index() {
         }
       }
     };
-
+    
     void fetchRoute();
 
     return () => {
@@ -139,7 +155,7 @@ export default function Index() {
       await NfcManager.start();
       await NfcManager.requestTechnology(NfcTech.Ndef);
       const tag = await NfcManager.getTag();
-
+      console.log("NFC Tag Detected", tag);
       if (tag) {
         setNfcPopupMessage("Successfully scanned");
         setNfcMessageIcon("check-circle");
@@ -241,7 +257,7 @@ export default function Index() {
                 openCategoryPicker("start");
               }}
               onLocateStart={() => {
-                setStart("Current location");
+                setStart("UserLoc");
               }}
               onOpenCategoriesDest={() => {
                 openCategoryPicker("dest");
