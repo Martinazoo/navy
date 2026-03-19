@@ -35,7 +35,7 @@ export default function Index() {
   const { colors: themeColors, highContrast, fontScale } = useTheme();
   const { height: SCREEN_HEIGHT } = Dimensions.get("window");
   const MIN_PANEL_HEIGHT = 120;
-  const MAX_PANEL_HEIGHT = SCREEN_HEIGHT * 0.33;
+  const MAX_PANEL_HEIGHT = SCREEN_HEIGHT * 0.4;
   
 
   const [start, setStart] = useState("");
@@ -51,8 +51,8 @@ export default function Index() {
   const [nfcMessageIcon, setNfcMessageIcon] = useState("");
   const [routeString, setRouteString] = useState("");
 
-  const panelHeight = useRef(new Animated.Value(MAX_PANEL_HEIGHT)).current;
-  const lastOffset = useRef(MAX_PANEL_HEIGHT);
+  const panelHeight = useRef(new Animated.Value(SCREEN_HEIGHT*0.34)).current;
+  const lastOffset = useRef(SCREEN_HEIGHT * 0.34);
 
   const styles = useMemo(
     () => createIndexStyles(themeColors, highContrast, fontScale),
